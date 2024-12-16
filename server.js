@@ -1,6 +1,7 @@
 const express = require("express");
 const { sequelize } = require("./config/dbconnection");
-
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const app = express();
 require("dotenv").config();
@@ -10,9 +11,29 @@ app.use(express.json());
 //including route modeule
 app.use("/", require("./route/userRoute"));
 
+
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'User Management API',
+      version: '1.0.0',
+      description: 'API documentation for user management',
+    },
+  },
+  apis: ['./route/userRoute.js'], // Path to your route files
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+console.log(swaggerDocs); 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 app.use((req, res) => {
   res.json({ message: "there is no api endpoint " }); //handling wrong end point
 });
+
+
 (async () => {
   try {
     // Test the database connection

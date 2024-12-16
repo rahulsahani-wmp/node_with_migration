@@ -24,22 +24,23 @@ const getuserdatabyid = async (req, res) => {
       res.status(404).json({ message: "user not found" });
     } //handling if user not found
   } catch {
-    res.status(500).json({ message: "internal server error" });
+    res.status(500).json({ message: "internal server error " });
   }
 };
 
 //controller for get user by id
-const getuserdatabyemail = (req, res) => {
+const getuserdatabyemail = async (req, res) => {
   try {
-    const userdata = userService.getuserbyid(req);
+    const userdata = await userService.getuserbyemail(req);
 
     if (userdata) {
       res.json(userdata);
     } else {
       res.status(404).json({ message: "user not found" });
     } //handling if user not found
-  } catch {
-    res.status(500).json({ message: "internal server error" });
+  } catch(error) {
+    console.log(error)
+    res.status(500).json({ message: "internal server error " });
   }
 };
 
@@ -67,14 +68,14 @@ const postuserdata = async (req, res) => {
 const login = async (req, res) => {
   try {
     const userdata = await userService.login(req,res);
-
-    if (userdata)
+    console.log("inside controller" , userdata.status)
+    if (userdata.status==true)
       { 
         res.status(201).json({
           message: "successfully login",
-          User: userdata,
+          User: userdata.user,
         });}
-      else if(userdata.error) {
+      else if(userdata.status==false) {
         res.status(409).json({ message: userdata.error }); //returning response if user already exist
       }
     } catch (error) {

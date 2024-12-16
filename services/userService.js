@@ -1,6 +1,6 @@
 const user = require("../db/models/user");
 const bcrypt = require("bcryptjs");
-const { verifyuser } = require("../middleware/userAuthenticate");
+
 
 //get all user
 exports.getusers = async () => {
@@ -20,7 +20,8 @@ exports.getuserbyid = async (id) => {
 
 //get user by email
 exports.getuserbyemail = (req) => {
-  const { email } = req.body; //destructure
+  const { email } = req.query; //destructure
+  
   const result = user.findOne({ where: { email: email } }); //fetch user by emailid
   if (result) {
     return result;
@@ -60,15 +61,15 @@ exports.login = async (req)=>{
     const isPasswordValid = await bcrypt.compare(req.body.password, result.password);
     if (isPasswordValid) {
       console.log("Login successful");
-      return result; // Return userdata for a successful login
+      return {status:true,user:result,error:null}; // Return userdata for a successful login
     } else {
       console.log("Incorrect password");
-      return {error:"incorrect password"}
+      return {status:false,error:"incorrect password"}
       
     }
   } else {
     console.log("Check credentials again");
-    return {error:"invalid credential"}
+    return {status:false,error:"invalid email"}
   }
 }
 

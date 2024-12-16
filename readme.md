@@ -29,7 +29,7 @@ Make sure you have the following installed:
    ```
 
 3. Configure the database connection:
-   Update the `config/config.json` file (for Sequelize) with your database credentials:
+   Update the `config/config.js` file (for Sequelize) with your database credentials:
    ```json
    {
      "development": {
@@ -52,26 +52,16 @@ Make sure you have the following installed:
    npm start
    ```
 
-## Project Structure
-```
-.
-├── config/
-│   ├── config.json  # Database configurations
-├── migrations/
-│   └── [timestamp]-[migration-name].js  # Migration files
-├── models/
-│   ├── index.js     # Sequelize setup
-│   └── [model-name].js  # Model definitions
-├── routes/
-│   └── [your-routes].js  # API routes
-├── app.js           # Main application file
-├── package.json     # Project metadata and dependencies
-└── README.md        # Project documentation
-```
+
 
 ## Using Sequelize CLI
 
 ### Create a Model
+### Run Migrations
+To to create database:
+```bash
+npx sequelize-cli db:create
+```
 To create a new model and its corresponding migration:
 ```bash
 npx sequelize-cli model:generate --name ModelName --attributes key1:type1,key2:type2
